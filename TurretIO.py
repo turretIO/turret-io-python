@@ -101,12 +101,12 @@ class Account(TurretIO):
 
         return None
 
-class Segment(TurretIO):
+class Target(TurretIO):
 
-    URI = '/latest/segment'
+    URI = '/latest/target'
 
     def __init__(self, key, secret):
-        super(Segment, self).__init__(key, secret)
+        super(Target, self).__init__(key, secret)
 
     def get(self, name):
         return self.GET('%s/%s' % (self.URI, name))
@@ -120,30 +120,30 @@ class Segment(TurretIO):
                          {'attributes': attribute_map})
 
 
-class SegmentEmail(TurretIO):
+class TargetEmail(TurretIO):
 
-    URI = '/latest/segment'
+    URI = '/latest/target'
 
     def __init__(self, key, secret):
-        super(SegmentEmail, self).__init__(key, secret)
+        super(TargetEmail, self).__init__(key, secret)
 
-    def get(self, segment_name, email_id):
-        return self.GET('%s/%s/email/%s' % (self.URI, segment_name, email_id))
+    def get(self, target_name, email_id):
+        return self.GET('%s/%s/email/%s' % (self.URI, target_name, email_id))
 
-    def create(self, segment_name, subject, html_body, plain_body):
-        return self.POST('%s/%s/email' % (self.URI, segment_name),
+    def create(self, target_name, subject, html_body, plain_body):
+        return self.POST('%s/%s/email' % (self.URI, target_name),
             {'subject': subject, 'html': html_body, 'plain': plain_body})
 
-    def update(self, segment_name, email_id, subject, html_body, plain_body):
-        return self.POST('%s/%s/email/%s' % (self.URI, segment_name, email_id),
+    def update(self, target_name, email_id, subject, html_body, plain_body):
+        return self.POST('%s/%s/email/%s' % (self.URI, target_name, email_id),
             {'subject': subject, 'html': html_body, 'plain': plain_body})
 
-    def sendTest(self, segment_name, email_id, email_from, recipient):
-        return self.POST('%s/%s/email/%s/sendTestEmail' % (self.URI, segment_name, email_id),
+    def sendTest(self, target_name, email_id, email_from, recipient):
+        return self.POST('%s/%s/email/%s/sendTestEmail' % (self.URI, target_name, email_id),
             {'email_from': email_from, 'recipient': recipient})
 
-    def send(self, segment_name, email_id, email_from):
-        return self.POST('%s/%s/email/%s/sendEmail' % (self.URI, segment_name, email_id),
+    def send(self, target_name, email_id, email_from):
+        return self.POST('%s/%s/email/%s/sendEmail' % (self.URI, target_name, email_id),
             {'email_from': email_from})
 
 
