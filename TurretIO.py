@@ -43,7 +43,7 @@ class TurretIO(object):
         return base64.b64decode(self.secret)
 
     def build_string_to_sign(self, uri, t, data=None):
-    if data is None:
+        if data is None:
             data = {}
 
         if len(data) is not 0:
@@ -52,26 +52,26 @@ class TurretIO(object):
         return '%s%s' % (uri, t)
 
     def make_headers(self, uri, t, data=None):
-    if data is None:
+        if data is None:
             data = {}
 
-    headers = {}
+        headers = {}
         headers['X-LS-Time'] = t
         headers['X-LS-Key'] = self.key
         headers['X-LS-Auth'] = base64.b64encode(hmac.new(self.get_secret(), self.build_string_to_sign(uri, t, data), hashlib.sha512).digest())
         headers['Content-Type'] = 'text/json'
-    return headers
+        return headers
 
     def make_queue_request(self, uri, data=None):
-    if data is None:
-        data = {}
+        if data is None:
+            data = {}
         t = str(int(time.time()))   
-    headers = self.make_headers(uri, t, data)
-    return {'url': uri, 'api_key': self.key, 'signature': headers['X-LS-Auth'], 'time': t, 'payload': base64.b64encode(data)} 
+        headers = self.make_headers(uri, t, data)
+        return {'url': uri, 'api_key': self.key, 'signature': headers['X-LS-Auth'], 'time': t, 'payload': base64.b64encode(data)} 
  
     def request(self, uri, t, type, data=None):
-    if data is None:
-        data = {}
+        if data is None:
+            data = {}
         headers = self.make_headers(uri, t, data)
  
         if type == 'GET':
@@ -177,7 +177,7 @@ class User(TurretIO):
         if property_map is None:
             property_map = {}
 
-    return property_map 
+        return property_map 
 
     def get(self, email):
         return self.GET('%s/%s' % (self.URI, email))
