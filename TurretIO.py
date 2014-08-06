@@ -42,19 +42,38 @@ class TurretIO(object):
     def get_secret(self):
         return base64.b64decode(self.secret)
 
-    def build_string_to_sign(self, uri, t, data={}):
+    def build_string_to_sign(self, uri, t, data=None):
+    if data is None:
+            data = {}
+
         if len(data) is not 0:
             return '%s%s%s' % (uri, data, t)
 
         return '%s%s' % (uri, t)
 
-    def request(self, uri, t, type, data={}):
-        headers = {}
+    def make_headers(self, uri, t, data=None):
+    if data is None:
+            data = {}
+
+    headers = {}
         headers['X-LS-Time'] = t
         headers['X-LS-Key'] = self.key
         headers['X-LS-Auth'] = base64.b64encode(hmac.new(self.get_secret(), self.build_string_to_sign(uri, t, data), hashlib.sha512).digest())
         headers['Content-Type'] = 'text/json'
+    return headers
 
+    def make_queue_request(self, uri, data=None):
+    if data is None:
+        data = {}
+        t = str(int(time.time()))   
+    headers = self.make_headers(uri, t, data)
+    return {'url': uri, 'api_key': self.key, 'signature': headers['X-LS-Auth'], 'time': t, 'payload': base64.b64encode(data)} 
+ 
+    def request(self, uri, t, type, data=None):
+    if data is None:
+        data = {}
+        headers = self.make_headers(uri, t, data)
+ 
         if type == 'GET':
             return requests.get('%s%s' % (DOMAIN, uri), headers=headers)
 
@@ -154,12 +173,28 @@ class User(TurretIO):
     def __init__(self, key, secret):
         super(User, self).__init__(key, secret)
 
+    def setup_property_map(self, property_map=None):
+        if property_map is None:
+            property_map = {}
+
+    return property_map 
+
     def get(self, email):
         return self.GET('%s/%s' % (self.URI, email))
 
-    def set(self, email, attribute_map, property_map={}):
-        if len(property_map) > 0:
-            attribute_map['properties'] = property_map
+    def set(self, email, attribute_map, property_map=None):
+        attribute_map['properties'] = self.setup_property_map(property_map) 
 
         return self.POST('%s/%s' % (self.URI, email), attribute_map)
+
+
+    def queue_set(self, email, attribute_map, property_map=None):
+        attribute_map['properties'] = self.setup_property_map(property_map) 
+        
+        payload = self.make_queue_request('%s/%s' % (self.URI, email), json.dumps(attribute_map))
+    return json.dumps({'api_key': payload['api_key'],
+            'signature': payload['signature'],
+            'time': payload['time'],
+            'url': payload['url'],
+            'payload': payload['payload']})
 
