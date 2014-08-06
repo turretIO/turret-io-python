@@ -8,5 +8,6 @@ setup(
     author_email = 'team@turret.io',
     description = 'Turret.IO Python client library',
     keywords = 'Turret.IO, turretio, email marketing',
-    url = 'http://turret.io'
+    url = 'http://turret.io',
+    install_requires = ['requests']
 )
