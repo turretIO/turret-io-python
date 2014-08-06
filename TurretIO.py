@@ -192,7 +192,7 @@ class User(TurretIO):
         attribute_map['properties'] = self.setup_property_map(property_map) 
         
         payload = self.make_queue_request('%s/%s' % (self.URI, email), json.dumps(attribute_map))
-    return json.dumps({'api_key': payload['api_key'],
+        return json.dumps({'api_key': payload['api_key'],
             'signature': payload['signature'],
             'time': payload['time'],
             'url': payload['url'],
