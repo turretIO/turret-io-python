@@ -20,7 +20,7 @@ __author__ = "Tim Henrich"
 __copyright__ = "Copyright 2014, Loop Science"
 __credits__ = ["Tim Henrich"]
 __license__ = "Apache"
-__version__ = "0.1"
+__version__ = "0.2"
 __maintainer__ = "Tim Henrich"
 __email__ = "tim@loopscience.com"
 __status__ = "Production"
@@ -28,7 +28,7 @@ __status__ = "Production"
 import base64, hmac, hashlib, time, json
 import requests
 
-DOMAIN='https://api.turret.io'
+DOMAIN='https://dev-api.turret.io'
 
 class CredentialsNotProvided(Exception):
     def __init__(self, message):
@@ -130,13 +130,13 @@ class Target(TurretIO):
     def get(self, name):
         return self.GET('%s/%s' % (self.URI, name))
 
-    def create(self, name, attribute_map):
+    def create(self, name, attribute_list):
         return self.POST('%s/%s' % (self.URI, name),
-                         {'attributes': attribute_map})
+                         {'attributes': attribute_list})
 
-    def update(self, name, attribute_map):
+    def update(self, name, attribute_list):
         return self.POST('%s/%s' % (self.URI, name),
-                         {'attributes': attribute_map})
+                         {'attributes': attribute_list})
 
 
 class TargetEmail(TurretIO):
