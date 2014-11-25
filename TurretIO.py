@@ -28,7 +28,7 @@ __status__ = "Production"
 import base64, hmac, hashlib, time, json
 import requests
 
-DOMAIN='https://dev-api.turret.io'
+DOMAIN='https://api.turret.io'
 
 class CredentialsNotProvided(Exception):
     def __init__(self, message):
