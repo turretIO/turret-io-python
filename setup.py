@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'TurretIO',
-    version = '0.1',
+    version = '0.2',
     py_modules = ['TurretIO'],
     author = 'Turret IO Team',
     author_email = 'team@turret.io',
